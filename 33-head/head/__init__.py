@@ -9,9 +9,9 @@ def signal_handler(signal, frame):
 
 def args_handler():
     parser = argparse.ArgumentParser(description='Displays the first N lines or bytes of a file.')
-    parser.add_argument('filename' , nargs="?", help='file to be read.')
-    parser.add_argument("-n", required=False, type=int, dest="total_lines", default=10)
-    parser.add_argument("-c", required=False, type=int, dest="total_bytes")
+    parser.add_argument('filename', nargs="*", help='Files to be read.')
+    parser.add_argument("-n", nargs="?", help='Number of lines to be read.', required=False, type=int, dest="total_lines", default=10)
+    parser.add_argument("-c", nargs="?", help='Number of bytes to be read.', required=False, type=int, dest="total_bytes")
     try:
         namespace = parser.parse_args()
         return namespace
@@ -53,9 +53,19 @@ def file_handler(filename, lines_to_read, bytes_to_read):
         file_ref.close()
 
 
+def multi_files_handler(files, lines_to_read, bytes_to_read):
+    if len(files) > 1:
+        for filename in files:
+            print(f'==> {filename} <==')
+            file_handler(filename, lines_to_read, bytes_to_read)
+            print("")
+    else:
+        file_handler(files[0], lines_to_read, bytes_to_read)
+
+
 signal.signal(signal.SIGINT, signal_handler)
 
 args = args_handler();
-file_handler(args.filename, args.total_lines, args.total_bytes) if args.filename else no_file_handler(args.total_lines, args.total_bytes)
+multi_files_handler(args.filename, args.total_lines, args.total_bytes) if args.filename else no_file_handler(args.total_lines, args.total_bytes)
 
 sys.exit(0)
