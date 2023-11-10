@@ -1,5 +1,12 @@
 # Coding Challenges (<https://codingchallenges.fyi/challenges/intro/>)
 
+## The 15 Challenge - Building Cat
+<https://codingchallenges.fyi/challenges/challenge-cat/>
+
+The cat utility reads files sequentially, writing them to the standard output.
+The file operands are processed in command-line order. If file is a single
+dash (‘-’) or absent, cat reads from the standard input.
+
 ## The 33 Challenge - Building Head
 <https://codingchallenges.substack.com/p/coding-challenge-33-head>
 
