@@ -7,8 +7,8 @@ import fileinput
 signal.signal(signal.SIGINT, lambda signal, frame: print("") or sys.exit(0))
 
 def args_handler():
-    parser = argparse.ArgumentParser(description='Reads files sequentially, writing them to the standard output.')
-    parser.add_argument('filename', nargs="?", help='File to be read. A single dash (\'-\') or absent, reads from the standard input.')
+    parser = argparse.ArgumentParser(prog='CCCAT', description='Reads files sequentially, writing them to the standard output.')
+    parser.add_argument('filename', nargs="*", help='File to be read. A single dash (\'-\') or absent, reads from the standard input.')
 
     try:
         namespace = parser.parse_args()
@@ -18,32 +18,9 @@ def args_handler():
         exit(1)
 
 
-def file_handler(filename):
-    try:
-        with open(filename) as file_ref:
-            print(file_ref.read())
-            file_ref.close()
-    except FileNotFoundError:
-        print(f'cccat: {filename}: No such file or directory.')
-    except IsADirectoryError:
-        print(f'cccat: {filename}: Is a directory.')
-
-
-def no_file_handler():
-    try:
-        for text in fileinput.input():
-            print(text.rstrip())
-    except FileNotFoundError:
-        while True:
-            text = input()
-            print(text.rstrip())
-
-
 args = args_handler();
-if args.filename and '-' != args.filename:
-    file_handler(args.filename)
-else:
-    no_file_handler()
 
+for line in fileinput.input(args.filename):
+    print(line.rstrip())
 
 sys.exit(0)
